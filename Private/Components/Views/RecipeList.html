@@ -1,0 +1,273 @@
+<html lang="en">
+    <head>
+        <title>title</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link href="http://fonts.googleapis.com/css?family=Scope+One" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+        <script>            
+            function toggleShow(el){
+                if(el.is(":visible")){
+                   
+                 	el.hide();   
+                }
+                else{
+                   
+                	el.show();
+                }
+            }
+         </script>
+    </head>
+    <body>
+        <style type="text/css" media="screen">
+            body
+            {
+            font: 400 15px Lato, sans-serif;
+            line-height: 1.8;
+            color: #818181;
+            }
+            h2
+            {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: #303030;
+            font-weight: 600;
+            margin-bottom: 30px;
+            }
+            h4
+            {
+            font-size: 19px;
+            line-height: 1.375em;
+            color: #303030;
+            font-weight: 400;
+            margin-bottom: 30px;
+            }
+            .logo
+            {
+            color: #f4511e;
+            font-size: 200px;
+            }
+            .bg-grey
+            {
+            background-color: #f6f6f6;
+            }
+            .panel
+            {
+            border: 1px solid #f4511e;
+            border-radius: 0 !important;
+            transition: box-shadow 0.5s;
+            }
+            .panel:hover
+            {
+            box-shadow: 5px 0px 40px rgba(0,0,0, .2);
+            }
+            .panel-footer .btn:hover
+            {
+            border: 1px solid #f4511e;
+            background-color: #fff !important;
+            color: #f4511e;
+            }
+            .panel-heading
+            {
+            color: #fff !important;
+            background-color: #f4511e !important;
+            padding: 25px;
+            border-bottom: 1px solid transparent;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+            }
+            .panel-footer
+            {
+            background-color: white !important;
+            }
+            .panel-footer h3
+            {
+            font-size: 32px;
+            }
+            .panel-footer h4
+            {
+            color: #aaa;
+            font-size: 14px;
+            }
+            .container-fluid
+            {
+            padding: 10px 50px;
+            }
+            .panel-footer .btn
+            {
+            margin: 15px 0;
+            background-color: #f4511e;
+            color: #fff;
+            }
+            @media screen and (max-width: 768px)
+            {
+            .col-sm-4
+            {
+            text-align: center;
+            margin: 25px 0;
+            }
+            .btn-lg
+            {
+            width: 100%;
+            margin-bottom: 35px;
+            }
+            }
+            @media screen and (max-width: 480px)
+            {
+            .logo
+            {
+            font-size: 150px;
+            }
+            }
+
+</style>
+        <style type="text/css" media="screen">
+            .navbar {
+            font-family: Lato, sans-serif;
+            margin-bottom: 0;
+            background-color: none;
+            border: 0;
+            font-size: 11px !important;
+            letter-spacing: 4px;
+            opacity: 0.9;
+            }
+            .navbar li a, .navbar .navbar-brand {
+            color: black !important;
+            font-size:1.2em;
+            }
+            .navbar-nav li a:hover {
+            color: #fff !important;
+            }
+            .navbar-nav li.active a {
+            color: #fff !important;
+            background-color: #29292c !important;
+            }
+            .navbar-default .navbar-toggle {
+            border-color: transparent;
+            }
+            .open .dropdown-toggle {
+            color: #fff;
+            background-color: #555 !important;
+            }
+            .dropdown-menu li a {
+            color: #000 !important;
+            }
+            .dropdown-menu li a:hover {
+            background-color: red !important;
+            }
+            <!-- search bar css -->
+            #imaginary_container{
+            margin-top:20%; /* Don't copy this */
+            }
+            .stylish-input-group .input-group-addon{
+            background: white !important; 
+            }
+            .stylish-input-group .form-control{
+            border-right:0; 
+            box-shadow:0 0 0; 
+            border-color:#ccc;
+            }
+            .stylish-input-group button{
+            border:0;
+            background:transparent;
+            }          
+        
+        </style>
+        
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div id="imaginary_container"> 
+                    <div class="input-group stylish-input-group">
+                        <input type="text" name="filter|name" id="filter|name" class="form-control" placeholder="Search">
+						<!--  new button -->
+                        <span class="input-group-addon">
+						<?php addButtonTagWithActions("",array("doNothing"), "", null, null, null, "<span class='glyphicon glyphicon-search'></span>"); ?>
+						</span>
+						<!--  new button -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-default" role="navigation"> 
+            <div class="container-fluid"> 
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav"> 
+                        <li>
+                            <a href="#" onclick="$('#cuisineBox').show()">
+                               
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="toggleShow($('#cuisineBox'))">
+                               
+                            </a>
+                        </li>                         
+                        <li>
+                            <a href="#" data-toggle="collapse" data-target="#cuisineBox">
+                               
+                            </a>
+                        </li>                         
+                    </ul>                     
+                </div>                 
+            </div>             
+        </nav>
+        <div class="collapse" id="cuisineBox">
+            <div class="row">
+                <div class="col-md-4"> 
+                    Chinese
+</div>
+                <div class="col-md-4"> 
+                    Japanese
+</div>
+                <div class="col-md-4"> 
+                    Vietnamese
+</div>
+            </div>
+        </div>
+ 
+ 
+ <?php 
+    $displayGroup = $controller->displayGroup();
+    $headers = $controller->headers();
+?>
+        <div class="col-med-12">
+        	<?php addSubmitLinkWithActions("mainForm", array("page" => "RecipeEdit", "action" => "doNothing"), "Create Recipe"); ?>
+        </div>
+        
+        <div class="container">
+        
+            <div class="row">
+            <?php foreach ($displayGroup->objects() as $recipe) : ?>
+                <div class="col-xs-6 col-md-4"> 
+                    <?php   
+			$preview = $controller->pageWithName("RecipePreview");
+			$preview->setCurrentRecipe($recipe);
+			echo $preview->appendToResponse();
+					?>
+                </div>
+            <?php endforeach ?>
+            </div>
+        </div>
+        <div class="container">
+
+
+<input type="hidden" name="likeRecipeID" value="<?php echo $controller->formValueForKey("likeRecipeID"); ?>" id="likeRecipeID">
+<script>
+    function showFilters() {
+        if($('#filter-row').is(':visible')) {
+            $('#filter-row input').slideUp( "fast" );            
+            $('#filter-row').slideUp( "fast" );
+        } else {
+            $('#filter-row').slideDown( "fast" );
+            $('#filter-row input').slideDown( "fast" );
+        }
+    }
+ 
+</script>
+
+
+

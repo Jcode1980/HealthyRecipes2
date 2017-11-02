@@ -1,0 +1,50 @@
+	<style>
+		.recipeImage{
+			height: 300px;
+		}
+	
+	</style>
+
+ 				<?php 
+ 					$currentRecipe = $controller->currentRecipe();
+ 					
+ 				?>
+ 				
+ 				<div class="thumbnail"> 
+                     <div class =recipeImage >
+						<?php if($currentRecipe->valueForRelationship("mainImage")) : ?>
+							<?php $dimensions = proportionalWidthAndHeight($currentRecipe->valueForRelationship("mainImage")->field("width"), $currentRecipe->valueForRelationship("mainImage")->field("height"), 300); ?>
+	                        <img width="<?php echo $dimensions["width"]; ?>" src="<?php echo domainName()."/getImage.php?id=".$currentRecipe->valueForRelationship("mainImage")->field("id")."&key=safeThumbnailPath&entity=RecipeImage"; ?>" class="editform" />
+						
+						<?php else: ?>
+							<img width="100%" src="/images/NoImage_thumb.jpg" />
+						
+						<?php endif; ?>
+					</div>	
+                    
+                    
+                    <div>
+                        <div class="col-sm-9 col-md-8 text-left star-rating"> 
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </div>
+                        <div class="col-sm-3 col-md-4 numLikes">
+                            <span class="glyphicon glyphicon-heart"></span> 
+                        </div>                             
+                    </div>
+                    <div class="caption align-top">
+                        <h3><?php echo $controller->currentRecipe()->vars["name"]; ?></h3> 
+                        <div>
+                            <span><img src="assets/images/ProfileImage.jpg" class="img-responsive img-thumbnail" width="50" height="50" /></span>
+                            <span style="padding-left:5px;">John Adolfo</span>
+                        </div>       
+                        <div>
+                        	<?php if($controller->canEditRecipe()) : ?><span><?php addLinkWithParams("Edit", "RecipeEdit/" . $controller->currentRecipe()->field("id"), array()); ?></span>&nbsp/&nbsp <?php endif; ?>
+                        	<span><?php addLinkWithParams("View", "RecipeView/" . $controller->currentRecipe()->field("id"), array()); ?></span>
+                        </div>                      
+                    </div>           
+                </div>                     
+           

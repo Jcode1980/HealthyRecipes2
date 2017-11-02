@@ -1,0 +1,257 @@
+<style>
+	.jumbotron{
+		padding-top:30px;
+		padding-bottom:10px;
+		margin-bottom:5px;
+	}
+	
+	.container-fluid{
+		padding: 5px;
+	}
+</style>
+
+<form action="" method="<?php echo $controller->formMethod(); ?>" name="mainForm" id="mainForm" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="" id="action">
+	<input type="hidden" name="transactionID" value="<?php echo sessionValueForKey("transactionID"); ?>" id="transactionID">
+	<?php $form->hidden("page"); ?>
+<script>
+	$(window).scroll(function() {
+  sessionStorage.scrollTop = $(this).scrollTop();
+});
+
+$(document).ready(function() {
+  if (sessionStorage.scrollTop != "undefined") {
+    $(window).scrollTop(sessionStorage.scrollTop);
+  }
+});
+
+</script>
+<?php
+ $page = doEncrypt("RecipeList");
+ $action = doEncrypt("validateLogin"); 
+ $actionRemind = doEncrypt("sendPasswordReminder");
+
+	
+?>
+
+	<!--  This is the modal stuff.. should be in a component by itself -->
+    <div class="modal fade pg-show-modal" id="modal1" tabindex="-1" role="dialog" aria-hidden="true"> 
+        <div class="modal-dialog"> 
+            <div class="modal-content"> 
+            
+                <div class="modal-header"> 
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Login to HealthyKitch.com</h4>
+                </div>                             
+                <div class="modal-body"> 
+                    <div class="row" id="loginbox">
+                        <div class="col-xs-6">
+                            <div class="well">
+								
+                                <div>
+									<label for="username" class="control-label">Username</label>
+									<?php $form->text("login", ["placeholder" => "example@gmail.com", "required" => "true"]); ?>
+									<div class="error-message"></div>
+                                </div>
+								<div>
+                                    <?php $form->password("password", ["required" => "true"]); ?>
+									<div class="error-message"></div>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" id="remember"> Remember login
+                                    </label>
+                                    <p class="help-block">(if this is a private computer)</p>
+                                </div>
+								<div id="progressSC" style="display:none;"><img src="images/signin-loader.gif"></div>
+                                <!--  <button type="button" class="btn btn-success btn-block" onclick="validateLogin()">Login</button> -->
+								<input type="button" class="btn btn-success btn-block" name="signin" value="Sign In" onclick="validateLogin('<?php echo $page; ?>', '<?php echo $action; ?>' );" class="standardButton" id="loginButton">
+								
+								<div id="alertMsg">
+									something wong.
+								</div>
+								<div id="loginError">
+									something wong.
+								</div>
+                                								
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <p class="lead">Register now for <span class="text-success">FREE</span></p>
+                            <ul class="list-unstyled" style="line-height: 2">
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Create your own recipes
+                                </li>
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Create cookbooks
+                                </li>
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Consult a nutirtionist
+                                </li>
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Save recipes on to cookbooks
+                                </li>
+                                <li>
+                                    <a href="/read-more/"><u>Read more</u></a>
+                                </li>
+                            </ul>
+                            <p><a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show();" class="btn btn-info btn-block">Yes please, register now!</a></p>
+                        </div>
+                    </div>
+                    <div class="row" id="signupbox" style="display:none;">
+                         <div  class="mainbox col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="panel-title">Sign Up</div>
+                                    <div style="float:right; font-size: 85%; position: relative; top:-10px">
+                                        <a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a>
+                                    </div>
+                                </div>                                             
+                                
+                                
+                                <div class="panel-body">
+                                        <div id="signupalert" style="display:none" class="alert alert-danger">
+                                            <p>Error:</p>
+                                            <span></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email" class="col-md-3 control-label">Email</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="email" placeholder="Email Address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="firstname" class="col-md-3 control-label">First Name</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="firstname" placeholder="First Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lastname" class="col-md-3 control-label">Last Name</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="lastname" placeholder="Last Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password" class="col-md-3 control-label">Password</label>
+                                            <div class="col-md-9">
+                                                <input type="password" class="form-control" name="signUpPassword" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- Button -->                                                         
+                                            <div class="col-md-offset-3 col-md-9">
+                                            <!-- ddButtonTagWithActions($label, $actions, $class = null, $id = null, $callBack = null, $disabled = false, $innerHTML = null) -->
+                                            	<?php addButtonTagWithActions("",array("action"=>"signUpAction", "page"=>"LoginModal"), "btn btn-info", "btn-signup", null, null, "<i class='icon-hand-right'></i> &nbsp; Sign Up"); ?>
+                                            </div>
+                                       </div>
+                                                                                       
+                                        </div> 
+                                    <!-- End Sign up form -->
+                                </div>
+                                
+                                
+                                
+                            </div>
+                        </div>                                     
+                    </div>
+                    
+                </div>     
+                
+                                        
+            </div>                         
+        </div>
+    </div>
+	
+	<!--  End Login modal -->
+	<?php if ($controller->errorMessage) : ?>
+		<div class="alert alert-dismissable alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+				×
+			</button>
+			<h4>
+				Error
+			</h4> 
+			<?php echo $controller->errorMessage; ?>
+		</div>
+	<?php endif; ?>
+
+	<?php if ($controller->alertMessage) : ?>
+		<div class="alert alert-dismissable alert-success">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+				×
+			</button>
+			<?php echo $controller->alertMessage; ?>
+		</div>
+	<?php endif; ?>
+	
+	<div class="jumbotron text-center banner">
+            <h1>healthy kitch</h1>
+           
+        </div>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        
+                        <li> 
+                            <?php if(!$controller->hasUser()): ?><a href="#tour" data-target="#modal1" data-toggle="modal">Login</a><?php endif; ?>
+                            <?php if($controller->hasUser()): ?><?php addSubmitLinkWithActions("mainForm", ["page" => "RecipeList", "action" => "logout"], "Logout"); ?><?php endif; ?>
+                        </li>
+                        
+                        <?php if($controller->hasUser()): ?>
+                        <li>
+                            <?php addSubmitLinkWithActions("mainForm", ["page" => "UserEdit", "action" => "doNothing"], "Profile"); ?>
+                        </li>
+                        <?php endif; ?>
+                        <li>
+                            <a href="#"><span class="glyphicon glyphicon-search"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+ 
+        <nav class="navbar navbar-default" role="navigation"> 
+            <div class="container-fluid"> 
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
+                    <ul class="nav navbar-nav"> 
+                        <li class="active">
+                            <?php addSubmitLinkWithActions("mainForm", array("page" => "RecipeList", "action" => "doNothing"), "Categories"); ?>
+                        </li>                         
+                        <li>
+                            <?php addSubmitLinkWithActions("mainForm", array("page" => "RecipeList", "action" => "doNothing"), "Popular Now"); ?>
+                        </li>                         
+                        <li>
+                            <?php addSubmitLinkWithActions("mainForm", array("page" => "RecipeList", "action" => "doNothing"), "Recent Recipes"); ?>
+                        </li>                         
+                        <li>
+                            <?php addSubmitLinkWithActions("mainForm", array("page" => "RecipeList", "action" => "doNothing"), "Dietary Requirements"); ?>
+                        </li>                         
+                    </ul>                     
+                </div>                 
+            </div>             
+        </nav>
+	
+	
+	<!-- Rendering INnser template -->
+	<?php $controller->renderInnerTemplate(); ?>
+	<!-- End Rendering INnser template -->
+<!-- End PageWrapper Form -->
+
+
+
+</form>
+
+
+

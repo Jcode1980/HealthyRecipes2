@@ -1,0 +1,148 @@
+<!--  This is the modal stuff.. should be in a component by itself -->
+    <style>
+    	.form-control {
+    		height:50px;
+    	}
+    </style>
+    
+    <?php
+ $page = doEncrypt("RecipeList");
+ $action = doEncrypt("validateLogin"); 
+ $actionRemind = doEncrypt("sendPasswordReminder");
+	
+?>
+    
+    <div class="modal fade pg-show-modal" id="modal1" tabindex="-1" role="dialog" aria-hidden="true"> 
+        <div class="modal-dialog"> 
+            <div class="modal-content"> 
+            
+                <div class="modal-header"> 
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Login to HealthyKitch.com</h4>
+                </div>                             
+                <div class="modal-body"> 
+                    <div class="row" id="loginbox">
+                        <div class="col-xs-6">
+                            <div class="well">
+								
+                                <div>
+									<label for="username" class="control-label">Username</label>
+									<?php $form->text("login", ["placeholder" => "example@gmail.com", "required" => "true"]); ?>
+									<div class="error-message"></div>
+                                </div>
+								<div>
+                                    <?php $form->password("password", ["required" => "true"]); ?>
+									<div class="error-message"></div>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" id="remember"> Remember login
+                                    </label>
+                                    <p class="help-block">(if this is a private computer)</p>
+                                </div>
+								<div id="progressSC" style="display:none;"><img src="images/signin-loader.gif"></div>
+                                <!--  <button type="button" class="btn btn-success btn-block" onclick="validateLogin()">Login</button> -->
+								
+								
+								<input type="button" class="btn btn-success btn-block" name="signin" value="Sign In" onclick="validateLogin('<?php echo $page; ?>', '<?php echo $action; ?>' );" class="standardButton" id="loginButton">
+								
+								<div id="alertMsg">
+									something wong.
+								</div>
+								<div id="loginError">
+									something wong.
+								</div>
+                                								
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <p class="lead">Register now for <span class="text-success">FREE</span></p>
+                            <ul class="list-unstyled" style="line-height: 2">
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Create your own recipes
+                                </li>
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Create cookbooks
+                                </li>
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Consult a nutirtionist
+                                </li>
+                                <li>
+                                    <span class="fa fa-check text-success"></span> Save recipes on to cookbooks
+                                </li>
+                                <li>
+                                    <a href="/read-more/"><u>Read more</u></a>
+                                </li>
+                            </ul>
+                            <p><a href="#" onclick="$('#loginbox').hide(); $('#signupbox').show();" class="btn btn-info btn-block">Yes please, register now!</a></p>
+                        </div>
+                    </div>
+                    <!--  start sign up box -->
+                    <div class="row" id="signupbox" style="display:none;">
+                        <!-- <div  class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"> -->
+                        <div  class="mainbox col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="panel-title">Sign Up</div>
+                                    <div style="float:right; font-size: 85%; position: relative; top:-10px">
+                                        <a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a>
+                                    </div>
+                                </div>                                             
+                                
+                                
+                                <div class="panel-body">
+                                        <div id="signupalert" style="display:none" class="alert alert-danger">
+                                            <p>Error:</p>
+                                            <span></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email" class="col-md-3 control-label">Email</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="email" placeholder="Email Address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="firstname" class="col-md-3 control-label">First Name</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="given" placeholder="First Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lastname" class="col-md-3 control-label">Last Name</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="surname" placeholder="Last Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding-bottom:100px;">
+                                            <label for="password" class="col-md-3 control-label">Password</label>
+                                            <div class="col-md-9">
+                                                <input type="password" class="form-control" style="height:40px;" name="signUpPassword" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- Button -->                                                         
+                                            <div class="col-md-offset-3 col-md-9">
+                                            <!-- ddButtonTagWithActions($label, $actions, $class = null, $id = null, $callBack = null, $disabled = false, $innerHTML = null) -->
+                                            	<?php addButtonTagWithActions("",array("action"=>"signUpAction", "page"=>"LoginModal"), "btn btn-info", "btn-signup", null, null, "<i class='icon-hand-right'></i> &nbsp; Sign Up"); ?>
+                                            </div>
+                                        </div>
+                                    <!-- End Sign up form -->
+                                </div>
+                                
+                                
+                                
+                            </div>
+                        </div>                                     
+                    </div>
+                    <!--  end sign up box -->
+                </div>     
+                
+                                        
+            </div>                         
+        </div>
+    </div>
+	
+	<!--  End Login modal -->

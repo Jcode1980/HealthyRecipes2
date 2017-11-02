@@ -1,0 +1,325 @@
+<style>
+	.floatRight{
+		float:right;
+	}
+	
+	.floatLeft{
+		float:left;
+	}
+	
+	.center{
+		margin: 0 auto;
+	}
+	
+	.inlineInput{
+		display:inline-block;
+		width:100px;
+		padding-left:10px;
+	}
+	
+	
+</style>
+
+<input type='hidden' name='selectedImageID' id='selectedImagaeID' value=''/>
+<input type="hidden" name="type" value="" id="type"/>
+<input type="hidden" name="selectedIngredientID" value="<?php echo $controller->formValueForKey("selectedIngredientID"); ?>" id="selectedIngredientID">
+<input type="hidden" name="selectedInstructionID" value="<?php echo $controller->formValueForKey("selectedInstructionID"); ?>" id="selectedInstructionID">
+<input type="hidden" name="selectedCommentID" value="<?php echo $controller->formValueForKey("selectedCommentID"); ?>" id="selectedCommentID">
+<input type="hidden" name="objectForDeletionID" value="<?php echo $controller->formValueForKey("objectForDeletionID"); ?>" id="objectForDeletionID">
+<input type="hidden" name="objectForDeletionID" value="<?php echo $controller->formValueForKey("objectForDeletionID"); ?>" id="objectForDeletionID">
+ <?php $form->hidden("newIngID"); ?>
+ 
+<div class="container">
+	<div class="row" style="text-align:center; margin-top:10px;">
+		<?php addSubmitButtonWithActions("Save", array("page" => "RecipeEdit", "action" => "save"), "btn btn-default center"); ?>
+		<?php addSubmitButtonWithActions("Back", array("page" => "RecipeEdit", "action" => "backAction"), "btn btn-default center"); ?>
+	</div>
+</div>
+<div class="container">
+	
+            <div class="row" style="padding-bottom:5px; padding-top:5px;]">
+                <input name="currentEntity.name" id="currentEntity.name" value="<?php echo $controller->currentEntity()->field("name");?>" style="width:100%;" type="text" class="form-control" placeholder="Recipe Name">
+            </div>
+            <div class="row">
+                <textarea name="currentEntity.recipeDescription" id="currentEntity.recipeDescription" title="Recipe Description"  class="form-control" rows="3" placeholder="Recipe Description"><?php echo $controller->currentEntity()->field("recipeDescription");?></textarea>
+            </div>
+            <div class="row" style="padding-bottom:5px; padding-top:10px;]">
+                <div class="col-xs-6 col-sm-6 col-md-6" style="padding-left:0px;">
+                <span>Serves:</span><span class="inlineInput""><input name="currentEntity.serves" id="currentEntity.serves" value="<?php echo $controller->currentEntity()->field("serves");?>" style="width:100px;" type="text" class="form-control"></span>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                <span>Ready In:</span><span class="inlineInput"><input name="currentEntity.readyIn" id="currentEntity.readyIn" value="<?php echo $controller->currentEntity()->field("readyIn");?>" style="width:100px;" type="text" class="form-control"></span>
+                <span class="inlineInput" style="margin-left:5px;">
+                 <select name="currentEntity.readyInMetric" id="currentEntity.readyInMetric" class="form-control" style="width:70%;">
+   	 		<?php  
+   	 			constructSelectOption($controller->currentEntity()->field("readyInMetric"), 1, "Hrs");
+				constructSelectOption($controller->currentEntity()->field("readyInMetric"), 2, "Mins"); 
+			?>
+   	 		</select>
+                </span>
+                </div>
+            	
+            </div>
+            
+            
+             <!-- Images -->
+    <div id="editImages" class="editSection">
+        <div class='section-header'>Recipe Images</div>
+        <div class='section-content'>
+        <?php
+            $images = array();  
+          
+           
+            if ($controller->currentEntity()->relationshipForName("images"))
+            {
+            	debugln("i am here");
+                $images = $controller->currentEntity()->arrayValueForRelationship("images");
+            }
+            else{
+            	debugln("i am not here");
+            }
+            
+            debugln("HOw many images do i have " . count($images));
+            
+            if (count($images) > 0) : ?>
+
+                <table id="imagesTable">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Image</th>
+							<th>Primary</th>
+							<th>Options</th>
+						</tr>
+					</thead>
+                    
+					<tbody>
+	                <?php foreach ($images as $image) : ?>
+	                    <tr>
+	                    	<td><?php echo $image->field("fileID") ?></td>
+	                        <td>
+	                        	<?php $dimensions = proportionalWidthAndHeight($image->field("width"), $image->field("height"), 200); ?>
+	                            <img width="<?php echo $dimensions["width"]; ?>" src="<?php echo domainName()."/getImage.php?id=".$image->field("id") ."&key=safeThumbnailPath&entity=RecipeImage"; ?>" />
+	                        </td>	
+							<td>
+							<?php addRadioButton("currentEntity.mainImageID", $image->field("id"), $controller->formValueForKeyPath("currentEntity.mainImageID")); ?>
+							</td>
+	                        <td class="submitColumn">
+	                            <?php addSubmitButtonWithActions("Delete", array("page" => "RecipeEdit", "action" => "deleteRelatedRecord",
+	                                "selectedImageID" => $image->field("id"), "type" => "RecipeImage"), "small", null, "confirmDelete('image')");
+	                            ?>
+	                        </td>
+	                    </tr>	
+	            	<?php endforeach; ?>
+					</tbody>
+                </table>
+                
+            <?php else : ?>
+                
+                <p>No Images</p>
+                
+            <?php endif; ?>	
+        </div>
+    </div><!-- EditImages -->
+
+    <!-- Image Upload -->
+    <div id="editUploadImages" class="row editSection">
+        <div class='section-header'>Upload Images</div>
+        <div class='newImageUpload section-content'>
+                <input type="file" name="image" value="" id="image1" />
+            <?php addSubmitButtonWithActions("Upload", array("page" => "RecipeEdit", "action" => "processImages"), "small", null, null, ! $controller->currentEntity()->primaryKeys); ?>
+        </div>
+    </div>
+            
+            <div class="row">
+                <hr style="margin-top:15px; margin-bottom:10px;">
+            </div>
+            <div class="row pg-empty-placeholder">
+                <h4 style="margin-top:0px;">Categories</h4>
+            </div>
+            <div class="row">
+                
+                <?php addSubmitButtonWithActions("Add Category", array("action" => "addMealType"), "btn btn-default floatRight"); ?>
+                 <select name="mealTypeSelection" id="mealTypeSelection" class="form-control" style="width:70%;">
+   	 		<?php $mealTypes = $controller->mealTypesArray(); 
+   	 		debugln("number of meal types?? " . count($mealTypes));
+   	 			foreach($mealTypes as $mealType) : 
+   	 			constructSelectOption("", $mealType->vars["id"], $mealType->vars["name"]);
+   	 		endforeach; ?>
+   	 		</select>
+   	 		
+            </div>
+            <div class="row" style="padding-top: 10px;">
+            	<?php 
+            	$recipeMealTypes = $controller->currentRecipe()->mealTypes();
+            	foreach($recipeMealTypes as $mealType): ?>
+            		<span class="tag label label-info"><span><?php echo $mealType->vars["name"]; ?></span>
+            		<?php addSubmitLinkWithActions("mainForm", array("action" => "removeMealType", "objectForDeletionID"=> $mealType->vars["id"]), null, null, null, null, false, null)?>
+					<i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a> </span>
+            	<?php endforeach; ?>
+                 
+            </div>
+            <div class="row">
+                <hr style="margin-top:15px; margin-bottom:10px;">
+            </div>
+            
+            <!--  Dietary Requirements  -->
+            <div class="row pg-empty-placeholder">
+                <h4 style="margin-top:0px;">Dietary Requirements</h4>
+            </div>
+            <div class="row">
+                <?php addSubmitButtonWithActions("Add Requirement", array("action" => "addDietaryCategory"), "btn btn-default floatRight"); ?>
+                <select name="dietaryCategorySelection" class="form-control" style="width:70%;"> 
+                  <?php $dietaryCategories = $controller->dietaryCategoriesArray(); 
+   	 			foreach($dietaryCategories as $dietaryCategory) : 
+   	 			constructSelectOption("", $dietaryCategory->vars["id"], $dietaryCategory->vars["name"]);
+   	 		endforeach; ?>                  
+                </select>
+            </div>
+            <div class="row" style="padding-top: 10px;">
+                <?php 
+            	$dietaryCategories = $controller->currentRecipe()->dietaryCategories();
+            	foreach($dietaryCategories as $dietaryCategory): ?>
+                <span class="tag label label-info"><span><?php echo $dietaryCategory->field("name");?></span>
+                <?php addSubmitLinkWithActions("mainForm", array("action" => "removeDietaryCategory", "objectForDeletionID"=> $dietaryCategory->vars["id"]), null, null, null, null, false, null)?>
+					<i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a> </span>
+           		<?php endforeach; ?>
+            </div>
+            
+             <!--  Nutritional Benefits  -->
+            <div class="row pg-empty-placeholder">
+                <h4 style="margin-top:0px;">Nutritional Benefits</h4>
+            </div>
+            <div class="row">
+                <?php addSubmitButtonWithActions("Add Nutritional Benefit", array("action" => "addNutritionalBenefit"), "btn btn-default floatRight"); ?>
+                <select name="nutritionalBenefitSelection" class="form-control" style="width:70%;"> 
+                  <?php $nutritionalBenefits = $controller->nutritionalBenefitsArray(); 
+   	 			foreach($nutritionalBenefits as $nutritionalBenefit) : 
+   	 			constructSelectOption("", $nutritionalBenefit->vars["id"], $nutritionalBenefit->vars["name"]);
+   	 		endforeach; ?>                  
+                </select>
+            </div>
+            <div class="row" style="padding-top: 10px;">
+                <?php 
+            	$nutritionalBenefits = $controller->currentRecipe()->nutritionalBenefits();
+            	foreach($nutritionalBenefits as $nutritionalBenefit): ?>
+                <span class="tag label label-info"><span><?php echo $nutritionalBenefit->field("name");?></span>
+                <?php addSubmitLinkWithActions("mainForm", array("action" => "removeNutritionalBenefit", "objectForDeletionID"=> $nutritionalBenefit->vars["id"]), null, null, null, null, false, null)?>
+					<i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a> </span>
+           		<?php endforeach; ?>
+            </div>
+            
+            <div class="row">
+                <hr style="margin-top:15px; margin-bottom:10px;">
+            </div>
+            <div class="row pg-empty-placeholder">
+                <h4 style="margin-top:0px; display:inline-block;">Ingredients</h4>
+                <span class="glyphicon glyphicon-plus-sign"></span>
+                <?php addSubmitButtonWithActions("+", array("action" => "createIngredient"), "btn btn-default center"); ?>
+                <?php addSubmitButtonWithActions("Save", array("action" => "save"), "btn btn-default center"); ?>
+            </div>
+            <?php if($controller->selectedMeasuredIngredient() != null) : ?>
+            <div class="row">
+                <div class="col-md-2 col-xs-2 col-sm-2">
+                    <input style="width:100%;"name="selectedMeasuredIngredient.amount" id="selectedMeasuredIngredient.amount" value="<?php echo $controller->selectedMeasuredIngredient()->field("amount");?>" type="text" class="form-control" placeholder="Amount">
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3">
+                   
+			<select name="selectedMeasuredIngredient.metricID" id="selectedMeasuredIngredient.metricID"  class="form-control" style="width:90%;">
+   	 		<?php $metrics = $controller->metricsArray(); 
+				$def = $controller->formValueForKeyPath("selectedMeasuredIngredient.metricID");
+   	 			foreach($metrics as $metric) : 
+   	 			constructSelectOption($def, $metric->vars["id"], $metric->vars["name"]);
+   	 		endforeach; ?>
+   	 		</select>
+                    
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                	
+                    <input style="width:100%;" name="selectedMeasuredIngredient.name" id="selectedMeasuredIngredient.name"  value="<?php echo $controller->selectedMeasuredIngredient()->field("name");?>" type="text" class="form-control" placeholder="Ingredient">
+                </div>
+            </div>
+            <?php endif; ?>
+            
+            <!-- The repetition of Ingredients -->
+            <?php foreach($controller->currentRecipe()->sortedMeasuredIngredients() as $measuredIngredient) : ?>
+             <div class="row">
+             	 <div class="col-md-1 col-xs-1 col-sm-1">
+             	
+                    <span><?php addSubmitButtonWithActions("Edit", array("page" => "RecipeEdit", "action" => "editIngredient", "newIngID" => $measuredIngredient->field("id")), "btn btn-default center"); ?>
+                    
+                    </span>
+                </div>
+                <div class="col-md-1 col-xs-1 col-sm-1">
+                    <span><?php echo $measuredIngredient->field("amount") ?></span>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3">
+                   <span><?php echo $measuredIngredient->valueForKeyPath("metric.name") ?></span>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4">
+                    <span><?php echo $measuredIngredient->field("name") ?></span>
+                </div>
+                <div class="col-md-1 col-xs-1">
+                    <?php addSubmitLinkWithActions("mainForm", array("action" => "deleteIngredient", "objectForDeletionID"=> $measuredIngredient->vars["id"]), null, null, null, null, false, null) ?>
+                	<i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a> </span>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            
+            <div class="row">
+                <hr style="margin-top:10px; margin-bottom:10px;">
+            </div>
+           
+            <div class="row pg-empty-placeholder">
+                <h4 style="margin-top:0px; display:inline-block;">Instructions</h4>
+            </div>
+             <div class="row">
+             	<textarea name="currentEntity.instructions" id="currentEntity.instructions" title="Recipe Instructions"  class="form-control" rows="8" placeholder="Recipe Instructions"><?php echo $controller->currentEntity()->field("instructions");?></textarea>
+             	 
+             </div>
+            
+            <div class="row pg-empty-placeholder">
+                <h4 style="margin-top:10px; display:inline-block;">Nutritional Benefits</h4>
+            </div>
+             <div class="row">
+             	<textarea name="currentEntity.nutritionalBenefit" id="currentEntity.nutritionalBenefit" title="Nutritional Benefits"  class="form-control" rows="8" placeholder="Nutritional Benefits"><?php echo $controller->currentEntity()->field("nutritionalBenefit");?></textarea>
+             	 
+             </div>
+            
+             <!-- 
+             <?php if($controller->selectedInstruction() != null) : ?>
+            <div class="row">
+                <div class="col-md-2 col-xs-2 col-sm-2">
+                	<?php echo $controller->selectedInstruction()->field("sortID"); ?>
+                </div>
+                <div class="col-md-8 col-xs-8 col-sm-8">
+                    <input style="width:100%;"name="selectedInstruction.descText" id="selectedInstruction.descText" value="<?php echo $controller->selectedInstruction()->field("descText");?>" type="text" class="form-control" placeholder="Instruction">
+                </div>
+            </div>
+            <?php endif; ?>
+             <?php foreach($controller->currentRecipe()->sortedInstructions() as $instruction):?>
+            <div class="row">
+            	 <div class="col-md-1 col-xs-1 col-sm-1">
+                    <span><?php addSubmitButtonWithActions("Edit", array("action" => "doNothing", "selectedInstructionID" => $instruction->field("id")), "btn btn-default center"); ?></span>
+                </div>
+                <div class="col-md-1 col-xs-1" style="text-align:center;">
+                    <?php echo $instruction->field("sortID"); ?>
+</div>
+                <div class="col-md-7 col-xs-7">
+                    <?php echo $instruction->field("descText"); ?>                    
+                </div>
+                <div class="col-md-1 col-xs-1">
+                    <?php addSubmitLinkWithActions("mainForm", array("action" => "deleteInstruction", "objectForDeletionID"=> $instruction->vars["id"]), null, null, null, null, false, null) ?>
+                	<i class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a> </span>
+                </div>
+                
+            </div>
+             
+            
+           <?php endforeach; ?>
+           -->
+             <div class="row">
+                <hr style="margin-top:15px; margin-bottom:50px;">
+            </div>
+        </div>
+        

@@ -1,0 +1,51 @@
+
+<style>
+	.userArea{
+		margin:10px;
+	}
+</style>
+
+<input type='hidden' name='selectedImageID' id='selectedImagaeID' value=''/>
+<input type="hidden" name="type" value="" id="type"/>
+
+<div class="container">
+	<div class="row" style="text-align:center; margin-top:10px;">
+		<?php addSubmitButtonWithActions("Save", array("page" => "UserEdit", "action" => "save"), "btn btn-default center"); ?>
+		<?php addSubmitButtonWithActions("Back", array("page" => "UserEdit", "action" => "backAction"), "btn btn-default center"); ?>
+	</div>
+</div>
+<div class="row userArea">
+	<div class="col-md-6 col-xs-6 col-sm-6">
+  <table>
+	<tr>
+		<td>
+			Name:
+		</td>
+		<td>
+			<?php addTextField("currentUser.name", $controller->currentUser()->field("given")); ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Surname:
+		</td>
+		<td>
+			<?php addTextField("currentUser.name", $controller->currentUser()->field("surname")); ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Email:
+		</td>
+		<td>
+			<?php echo $controller->currentUser()->field("email"); ?>
+		</td>
+	</tr>  
+	</table>       
+	</div>  
+	<div class="col-md-6 col-xs-6 col-sm-6">
+		Pic goes here
+	</div>
+</div>
+
+

@@ -1,0 +1,36 @@
+<div class="container-fluid">
+	
+	<?php $rows = $controller->recipesByGrid(); foreach ($rows as $row) : ?>
+	
+	<div class="row">
+		
+		<?php foreach ($row as $recipe) : ?>
+		
+			<div class="col-md-4">
+				<div class="thumbnail">
+					<img alt="" src="<?php echo $recipe->displayImageThumbnailPath(); ?>" />
+					<div class="caption">
+						<h3>
+							<?php echo $recipe->field("name"); ?>
+						</h3>
+						<p>
+							<?php $desc = $recipe->field("recipeDescription"); 
+								if (strlen($desc) > 200) 
+									$desc = substr($desc, 0, 200); 
+								echo $desc;
+							?>
+						</p>
+						<p>
+							<a class="btn btn-primary" href="#">Action</a> <a class="btn" href="#">Action</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		
+		<?php endforeach; ?>
+		
+	</div>
+	
+	<?php endforeach; ?>
+	
+</div>
