@@ -61,6 +61,13 @@
                 $this->goToLocation(null, array($id));
             }
         }
+        
+        public function backAction(){
+        	$this->save();
+        	//return nextPage();
+        	$nextPage = $this->pageWithName("RecipeList");
+        	return $nextPage;
+        }
     
         /****************************************          
          *          Image Assist functions      *

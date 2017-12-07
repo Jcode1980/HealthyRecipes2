@@ -395,6 +395,19 @@
         }
         
         
+        public function readyInDisplay(){
+        	$readyInString = "";
+        	if($this->field("readyIn")){
+        		$readyInString = $this->field("readyIn");
+        	}
+        	
+        	if($this->field("readyInMetric")){
+        		$readyInString = $readyInString . (($this->field("readyInMetric") == 1) ? "Hrs" : "Mins");
+        	}	
+        	
+        	return $readyInString;
+        }
+        
         
 	} 
 ?>

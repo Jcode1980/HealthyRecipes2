@@ -7,7 +7,7 @@
 
 <input type='hidden' name='selectedImageID' id='selectedImagaeID' value=''/>
 <input type="hidden" name="type" value="" id="type"/>
-
+<?php $controller->pageWithName("UploaderModal")->appendToResponse(); ?>
 <div class="container">
 	<div class="row" style="text-align:center; margin-top:10px;">
 		<?php addSubmitButtonWithActions("Save", array("page" => "UserEdit", "action" => "save"), "btn btn-default center"); ?>
@@ -43,8 +43,23 @@
 	</tr>  
 	</table>       
 	</div>  
+	
+
+
+
+
 	<div class="col-md-6 col-xs-6 col-sm-6">
-		Pic goes here
+	  <div class="container">
+        <?php 
+        $profileImage = $controller->currentUser()->valueForRelationship("profileimage");
+        if($profileImage) : ?>
+			<?php $dimensions = proportionalWidthAndHeight($profileImage->field("width"), $currentRecipe->valueForRelationship("mainImage")->field("height"), 200); ?>
+				<img width="<?php echo $dimensions["width"]; ?>" src="<?php echo domainName()."/getImage.php?id=".$currentRecipe->valueForRelationship("mainImage")->field("id")."&key=safeThumbnailPath&entity=RecipeImage"; ?>" class="editform" />
+						<?php else: ?>
+							<img width="200px" src="/images/NoImage_thumb.jpg" />
+						<?php endif; ?>
+    </div>
+		 <a id="LinkID" href="#mediaUpload" role="button" class="btn btn-primary" data-toggle="modal">Upload Profile Photo</a>
 	</div>
 </div>
 

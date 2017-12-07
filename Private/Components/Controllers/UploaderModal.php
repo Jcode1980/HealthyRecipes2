@@ -16,6 +16,9 @@
 			
 			$this->uploader = $this->pageWithName("Uploader");
 			
+			addCSS("css/file-upload.css");
+			addJS("js/file-upload.js");
+			
 			global $extraCSS;
 			if (! in_array("css/bootstrap.css", $extraCSS) && ! in_array("css/bootstrap.min.css", $extraCSS)) {
 				debugln("#### WARNING: The UploaderModal requires Bootstrap and the Bootstrap CSS file was not directly detected. If you have included it elsewhere you can safely disable this warning in the component constructor.");

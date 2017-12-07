@@ -1,3 +1,4 @@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <style>
 	h4{
 		margin-bottom:0px;
@@ -7,9 +8,10 @@
  <?php 
 	$currentRecipe = $controller->currentRecipe();
 ?>
+<div ng-app="myApp" ng-controller="myCtrl">
 <div class="container">
 	<div class="row" style="text-align:center; margin-top:10px;">
-		<?php addSubmitButtonWithActions("Back", array("page" => "RecipeEdit", "action" => "backAction"), "btn btn-default center"); ?>
+		 <?php addSubmitButtonWithActions("Back", array("page" => "RecipeEdit", "action" => "backAction"), "btn btn-default center"); ?>
 	</div>
 </div>
     <div class="container">
@@ -22,6 +24,15 @@
 						
 						<?php endif; ?>
     </div>
+     <div class="container" style="padding-bottom:5px; padding-top:10px;">
+                <div class="col-xs-6 col-sm-6 col-md-6" style="padding-left:0px;">
+                <span>Serves:</span><span class="inlineInput""><input name="currentEntity.serves" id="currentEntity.serves" value="<?php echo $controller->currentEntity()->field("serves");?>" style="width:100px;" type="text" class="form-control"></span>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                	<span>Ready In:</span><span class="inlineInput"><?php echo $controller->currentRecipe()->readyInDisplay(); ?> {{readyInDisplay}} </span>
+                </div>
+        </div>
+    
         <div class="container">
                 <hr style="margin-top:15px; margin-bottom:10px;">
             </div>
@@ -62,8 +73,7 @@
                 <span class="tag label label-info"><?php echo $nutritionalBenefit->field("name");?></span>
                 
            		<?php endforeach; ?>
-            </div>
-            
+            </div>           
             <div class="container">
                 <hr style="margin-top:15px; margin-bottom:10px;">
             </div>
@@ -82,18 +92,21 @@
             <div class="container">
                 <hr style="margin-top:15px; margin-bottom:10px;">
             </div>
-           
             <div class="container">
                 <h4 style="margin-top:0px; display:inline-block;">Instructions</h4>
             </div>
              <div class="container">
              	<?php echo $controller->currentEntity()->instructionsDisplay(); ?>
              	 
-             </div>     
+             </div> </div>    
+ 
+ <script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.readyInDisplay = "<?php echo $controller->currentRecipe()->readyInDisplay(); ?>";
+    $scope.lastName = "Doe";
+});
+</script>
 
-
-
-
-
-     
-</div>
+             
+             

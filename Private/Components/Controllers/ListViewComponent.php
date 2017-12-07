@@ -1,5 +1,5 @@
 <?php
-	 require_once BLOGIC."/BLogic.php";
+	require_once BLOGIC."/BLogic.php";
     require_once ROOT."/Components/Controllers/PageWrapper.php";
 
 	class ListViewComponent extends PageWrapper  
